@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="./modules/jszip.min.js"></script>
+    <script src="./modules/FileSaver.min.js"></script>
+    <script defer src="./main.js"></script>
+</head>
+
+<body>
+    <div style="display:flex">
+        <div id="svgcontainer"></div>
+        <canvas id="canvas" style="border: 1px solid black"></canvas>
+    </div>
+    <input type="file" id="filechoose" accept="image/svg+xml">Select Image</button>
+    <button id="btn">Convert</button>
+    <label for="fps">Frames Per Second</label>
+    <input type="number" id="fps" name="fps" min="1" max="100" value="24" />
+
+    <label for="dur">Duration</label>
+    <input type="number" id="dur" name="dur" min="0" max="100" value="5" />
+
+    <!-- <p>Exported PNGs:</p>
+    <div id="output"></div> -->
+</body>
+
+</html>
