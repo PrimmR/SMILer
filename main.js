@@ -8,18 +8,10 @@ const nsResolver = prefix => {
 
 const blobify = e => new Blob([e], { type: 'image/svg+xml' });
 
-const addToZip = (zip, b64, name) => {
-    // Convert data URI to plain base64
-    let imgDataIndex = b64.indexOf("base64,") + "base64,".length;
-    let imgData = b64.substr(imgDataIndex);
-    zip.file(`${name}.png`, imgData, { base64: true });
-}
-
-const takeSnap = (svg, ctx) => {
-    // get all animateTransform elements
+const takeSnap = (svg, ctx, canvas) => {
+    // Get all animateTransform elements and store animVal.matrix in a dataset attribute
     let animateXPath = document.evaluate('//svg:*[svg:animateTransform]', svg, nsResolver, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 
-    // store all animateTransform animVal.matrix in a dataset attribute
     Object.keys([...Array(animateXPath.snapshotLength)]).forEach(i => {
         let node = animateXPath.snapshotItem(i);
         let mStr = [...node.transform.animVal].map(animVal => {
@@ -29,10 +21,9 @@ const takeSnap = (svg, ctx) => {
         node.dataset.transform = mStr;
     });
 
-    // get all animate elements
+    // Get all animate elements and store all properties in a dataset attribute on the target for the animation
     animateXPath = document.evaluate('//svg:animate', svg, nsResolver, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 
-    // store all animate properties in a dataset attribute on the target for the animation
     Object.keys([...Array(animateXPath.snapshotLength)]).forEach(i => {
         let node = animateXPath.snapshotItem(i);
         let propName = node.getAttribute('attributeName');
@@ -41,14 +32,14 @@ const takeSnap = (svg, ctx) => {
         target.dataset[propName] = computedVal;
     });
 
-    // create a copy of the SVG DOM
+    // Create a copy of the SVG DOM
     let parser = new DOMParser();
     let svgcopy = parser.parseFromString(svg.outerHTML, "application/xml");
 
-    // find all elements with a dataset attribute
+    // Find all elements with a dataset attribute
     animateXPath = svgcopy.evaluate('//svg:*[@*[starts-with(name(), "data")]]', svgcopy, nsResolver, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 
-    // copy the animated property to a style or attribute on the same element
+    // Copy the animated property to a style or attribute on the same element
     Object.keys([...Array(animateXPath.snapshotLength)]).forEach(i => {
         let node = animateXPath.snapshotItem(i);
         // for each data-
@@ -62,10 +53,9 @@ const takeSnap = (svg, ctx) => {
         }
     });
 
-    // find all animate and animateTransform elements from the copy document
+    // Find and remove all animate and animateTransform elements from the copy document
     animateXPath = svgcopy.evaluate('//svg:*[starts-with(name(), "animate")]', svgcopy, nsResolver, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 
-    // remove all animate and animateTransform elements from the copy document
     Object.keys([...Array(animateXPath.snapshotLength)]).forEach(i => {
         let node = animateXPath.snapshotItem(i);
         node.remove();
@@ -75,14 +65,11 @@ const takeSnap = (svg, ctx) => {
     let blob = blobify(svgcopy.documentElement.outerHTML);
     let url = URL.createObjectURL(blob);
 
-    // Promise of a base 64 string to return
-
-
     const tempImg = new Image();
 
     let promise = new Promise(resolve => {
         tempImg.addEventListener('load', () => {
-            // update canvas with new image
+            // Update canvas with new image
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = 'white';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -90,13 +77,8 @@ const takeSnap = (svg, ctx) => {
 
             URL.revokeObjectURL(url);
 
-            // create PNG image based on canvas
-            // let img = new Image();
-            // img.src = canvas.toDataURL("image/png", 50.0);
-            // document.getElementById('output').append(img);
-
-            // Export base 64 png image based on canvas
-            resolve(canvas.toDataURL("image/png", 50.0))
+            // Export base blob png image based on canvas
+            resolve(canvas.convertToBlob())
         });
     });
     tempImg.src = url;
@@ -114,9 +96,7 @@ document.getElementById("btn").addEventListener('click', () => {
     const frames = fps * duration;
 
     // Set up canvas
-    const canvas = document.getElementById('canvas');
-    canvas.width = 400;
-    canvas.height = 400;
+    const canvas = new OffscreenCanvas(400, 400)
 
     // Constant elements
     const ctx = canvas.getContext('2d');
@@ -133,7 +113,7 @@ document.getElementById("btn").addEventListener('click', () => {
             svg.setCurrentTime(i / fps);
             svg.pauseAnimations();
 
-            return takeSnap(svg, ctx).then(b64 => addToZip(zip, b64, i));
+            return takeSnap(svg, ctx, canvas).then(b64 => zip.file(`${i}.png`, b64));
         });
     }
 
