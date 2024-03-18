@@ -95,13 +95,17 @@ document.getElementById("btn").addEventListener('click', () => {
     const duration = parseFloat(document.getElementById('dur').value);
     const frames = fps * duration;
 
-    // Set up canvas
-    const canvas = new OffscreenCanvas(400, 400)
-
     // Constant elements
-    const ctx = canvas.getContext('2d');
     const svg = svgcontainer.querySelector('svg');
     const zip = new JSZip();
+
+
+    // Set up canvas
+    const svgaspectratio = svg.width.animVal.value / svg.height.animVal.value;
+    const quality = document.getElementById("quality").value
+    const canvas = new OffscreenCanvas(quality, quality / svgaspectratio)
+
+    const ctx = canvas.getContext('2d');
 
     // Set up a resolved promise for our loop
     let step = Promise.resolve();
@@ -137,6 +141,15 @@ document.getElementById("filechoose").addEventListener('change', e => {
         // Copy contents of SVG into document
         let parser = new DOMParser();
         let svgdoc = parser.parseFromString(text, "application/xml");
+
+        // Properly size SVG
+        svgdoc.documentElement.setAttribute("width", "100%");
+        svgdoc.documentElement.setAttribute("height", "100%");
+
         svgcontainer.innerHTML = svgdoc.documentElement.outerHTML;
     })
+
+    // Show convert button and update file label with file name 
+    document.getElementById('btn').style.display = "block";
+    document.getElementById('filelabel').textContent = file.name;
 });

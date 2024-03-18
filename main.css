@@ -1,0 +1,49 @@
+@import url(https://raw.githack.com/PrimmR/Webapp-CSS/main/common.css);
+
+:root {
+    --accent: var(--teal);
+}
+
+input {
+    width: 40%;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+#btn {
+    /* Auto hide until file input */
+    display: none;
+
+    margin: auto;
+    border-color: var(--accent);
+    font-size: 20pt;
+}
+
+#filelabel {
+    border-width: 2px;
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+#options-grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: 1fr 1fr;
+}
+
+#options-grid input,
+#options-grid .buttonify {
+    width: 200px;
+}
+
+#svgcontainer {
+    background-color: var(--box-background);
+
+    margin: auto;
+    width: 300px;
+    height: 300px;
+}

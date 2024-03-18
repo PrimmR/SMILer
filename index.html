@@ -2,24 +2,46 @@
 <html>
 
 <head>
+    <link rel="stylesheet" href="main.css">
     <script src="./modules/jszip.min.js"></script>
     <script src="./modules/FileSaver.min.js"></script>
     <script defer src="./main.js"></script>
 </head>
 
 <body>
-    <div id="svgcontainer"></div>
-    
-    <input type="file" id="filechoose" accept="image/svg+xml">Select Image</button>
-    <button id="btn">Convert</button>
-    <label for="fps">Frames Per Second</label>
-    <input type="number" id="fps" name="fps" min="1" max="100" value="24" />
+    <h1>SMILer</h1>
+    <h2>By PrimmR</h2>
+    <br>
 
-    <label for="dur">Duration</label>
-    <input type="number" id="dur" name="dur" min="0" max="100" value="5" />
+    <div id="svgcontainer" class="bordered"></div>
 
-    <!-- <p>Exported PNGs:</p>
-    <div id="output"></div> -->
+    <br>
+
+    <div id="options-grid">
+        <div>
+            <span>SVG File</span><br>
+            <label id="filelabel" class="buttonify bordered" for="filechoose">Browse</label>
+            <input type="file" id="filechoose" accept="image/svg+xml">
+        </div>
+
+        <div>
+            <span>Export Width (px)</small><br>
+                <input type="number" id="quality" name="quality" min="0" value="256" />
+        </div>
+
+        <div>
+            <span>Frames Per Second</span><br>
+            <input type="number" id="fps" name="fps" min="1" max="100" value="24" />
+        </div>
+
+        <div>
+            <span>Duration</span><br>
+            <input type="number" id="dur" name="dur" min="0" max="100" value="5" />
+        </div>
+    </div>
+
+    <br>
+    <button id="btn">Convert</button><br>
 </body>
 
 </html>
