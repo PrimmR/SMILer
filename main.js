@@ -87,6 +87,10 @@ const takeSnap = (svg, ctx, canvas) => {
 };
 
 document.getElementById("btn").addEventListener('click', () => {
+// Change border colour to denote processing
+document.getElementById('svgcontainer').style.borderColor = "var(--accent)";
+
+// Get chosen file
     const filename = document.getElementById("filechoose").files.item(0).name;
     const fileprefix = filename.substring(0, filename.lastIndexOf('.')) || filename;
 
@@ -126,8 +130,8 @@ document.getElementById("btn").addEventListener('click', () => {
         saveAs(blob, `${fileprefix}-frames.zip`);
 
         svg.unpauseAnimations();
+document.getElementById('svgcontainer').style.borderColor = "var(--box-border)";
     }));
-
 });
 
 // Setup when file chosen

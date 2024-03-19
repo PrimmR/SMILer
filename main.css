@@ -1,7 +1,7 @@
 @import url(https://raw.githack.com/PrimmR/Webapp-CSS/main/common.css);
 
 :root {
-    --accent: var(--teal);
+    --accent: var(--yellow);
 }
 
 input {
@@ -21,6 +21,10 @@ input[type="file"] {
     font-size: 20pt;
 }
 
+#btn:hover {
+    background-color: var(--accent);
+}
+
 #filelabel {
     border-width: 2px;
 
@@ -38,10 +42,12 @@ input[type="file"] {
 #options-grid input,
 #options-grid .buttonify {
     width: 200px;
+    text-align: center;
 }
 
 #svgcontainer {
     background-color: var(--box-background);
+    border-color: var(--box-border);
 
     margin: auto;
     width: 300px;
