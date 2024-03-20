@@ -10,10 +10,9 @@
 </head>
 
 <body>
-    <!--#include file="include_head.html" -->
+    <!--#include virtual="/header.html" -->
 
     <h1>SMILer</h1>
-    <h2>By PrimmR</h2>
     <p class="desc">A tool to convert SVG SMIL animations into frames</p>
     <br>
 
@@ -45,10 +44,14 @@
     </div>
 
     <br>
-    <button id="btn">Convert</button><br>
-
-    <div id="source"><a href="//github.com/PrimmR/SMILer" target="_blank" rel="noopener noreferrer">Source</a>
+    <div id="btncontainer">
+        <button id="btn">Convert</button><br>
     </div>
+
+    <div class="floatr"><a href="//github.com/PrimmR/SMILer" target="_blank" rel="noopener noreferrer">Source</a>
+    </div>
+
+    <!--#include virtual="/footer.html" -->
 </body>
 
 </html>
