@@ -71,8 +71,6 @@ const takeSnap = (svg, ctx, canvas) => {
         tempImg.addEventListener('load', () => {
             // Update canvas with new image
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = 'white';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.drawImage(tempImg, 0, 0, canvas.width, canvas.height);
 
             URL.revokeObjectURL(url);
